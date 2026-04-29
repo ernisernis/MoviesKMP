@@ -1,0 +1,12 @@
+.gradle/
+.kotlin/
+build/
+*/build/
+local.properties
+
+.idea/workspace.xml
+.idea/caches/
+.idea/artifacts/
+.idea/.name
+
+.DS_Store
