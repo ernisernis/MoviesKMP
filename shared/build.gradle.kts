@@ -1,111 +1,57 @@
+import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.kmp.library)
-    alias(libs.plugins.maven.publish)
-    alias(libs.plugins.compose.multiplatform)
-    alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlinx.serialization)
-    alias(libs.plugins.buildConfig)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
 }
 
 kotlin {
     androidTarget {
-        compilerOptions { jvmTarget = JvmTarget.JVM_17 }
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
+        }
     }
-
-    jvm {
-        compilerOptions { jvmTarget = JvmTarget.JVM_17 }
+    
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "Shared"
+            isStatic = true
+        }
     }
-    wasmJs { browser() }
-    iosArm64()
-    iosSimulatorArm64()
-
+    
+    jvm()
+    
+    js {
+        browser()
+    }
+    
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+    }
+    
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.compose.runtime)
-            implementation(libs.compose.ui)
-            implementation(libs.compose.foundation)
-            implementation(libs.compose.resources)
-            implementation(libs.kotlinx.coroutines.core)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kermit)
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.client.serialization)
-            implementation(libs.ktor.serialization.json)
-            implementation(libs.ktor.client.logging)
+            // put your Multiplatform dependencies here
         }
-
         commonTest.dependencies {
-            implementation(kotlin("test"))
-            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.kotlin.test)
         }
-
-        androidMain.dependencies {
-            implementation(libs.kotlinx.coroutines.android)
-            implementation(libs.ktor.client.okhttp)
-        }
-
-        jvmMain.dependencies {
-            implementation(libs.kotlinx.coroutines.swing)
-            implementation(libs.ktor.client.okhttp)
-        }
-
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
-
     }
 }
 
 android {
     namespace = "ernxe.dev.movieskmp.shared"
-    compileSdk = 36
-    defaultConfig {
-        minSdk = 23
-    }
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
-}
-
-//Publishing your Kotlin Multiplatform library to Maven Central
-//https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-publish-libraries.html
-mavenPublishing {
-    publishToMavenCentral()
-    coordinates("ernxe.dev.movieskmp", "shared", "1.0.0")
-
-    pom {
-        name = "movieskmp"
-        description = "Kotlin Multiplatform library"
-        url = "github url" //todo
-
-        licenses {
-            license {
-                name = "MIT"
-                url = "https://opensource.org/licenses/MIT"
-            }
-        }
-
-        developers {
-            developer {
-                id = "" //todo github nickname
-                name = "" //todo full name
-                email = "" //todo email
-            }
-        }
-
-        scm {
-            url = "github url" //todo
-        }
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
-    if (project.hasProperty("signing.keyId")) signAllPublications()
-}
-
-buildConfig {
-    // BuildConfig configuration here.
-    // https://github.com/gmazzo/gradle-buildconfig-plugin#usage-in-kts
 }
