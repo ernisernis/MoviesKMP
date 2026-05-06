@@ -2,7 +2,7 @@
 kotlin = "2.3.21"
 agp = "9.2.0"
 composeMultiplatform = "1.10.3"
-composeHotReload = "1.0.0"
+composeHotReload = "1.1.0"
 android-compileSdk = "37"
 android-targetSdk = "37"
 android-minSdk = "24"
