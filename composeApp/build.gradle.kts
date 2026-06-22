@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -50,6 +51,10 @@ kotlin {
             implementation(libs.androidx.navigation3.runtime)
             implementation(libs.jetbrains.navigation3.ui)
             implementation(libs.kotlinx.serialization.core)
+
+            implementation(libs.metrox.android)
+            implementation(libs.metrox.viewmodel)
+            implementation(libs.metrox.viewmodel.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
