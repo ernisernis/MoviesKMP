@@ -1,5 +1,7 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -8,7 +10,16 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.metro)
+    alias(libs.plugins.buildkonfig)
 }
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
+}
+val tmdbApiKey: String = localProperties.getProperty("TMDB_API_KEY", "")
 
 kotlin {
     android {
@@ -67,4 +78,12 @@ kotlin {
 
 dependencies {
     androidRuntimeClasspath(libs.compose.uiTooling)
+}
+
+buildkonfig {
+    packageName = "ernxe.dev.movieskmp"
+
+    defaultConfigs {
+        buildConfigField(STRING, "TMDB_API_KEY", tmdbApiKey)
+    }
 }

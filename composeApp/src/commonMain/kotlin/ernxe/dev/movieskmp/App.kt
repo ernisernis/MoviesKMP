@@ -90,7 +90,7 @@ fun EntryProviderScope<NavKey>.homeSection(
             Text(
                 modifier = Modifier
                     .align(Alignment.Center),
-                text = "Welcome to nav3, Home screen",
+                text = "Welcome to nav3, Home screen ${BuildKonfig.TMDB_API_KEY}",
             )
         }
     }
