@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.androidKmpLibrary)
     alias(libs.plugins.buildkonfig)
     alias(libs.plugins.kotlinSerialization)
+    alias(libs.plugins.metro)
 }
 
 val localProperties = Properties()
@@ -52,6 +53,8 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.metro.runtime)
+
             implementation(libs.kotlinx.coroutines.core)
 
             implementation(libs.kotlinx.serialization.core)

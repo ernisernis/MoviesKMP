@@ -34,11 +34,6 @@ kotlin {
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.compose.uiToolingPreview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.kotlinx.coroutines.android)
-        }
         commonMain.dependencies {
             implementation(projects.shared)
 
@@ -53,11 +48,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
 
             implementation(libs.androidx.navigation3.runtime)
+            implementation(libs.androidx.lifecycle.viewmodel.navigation3)
             implementation(libs.jetbrains.navigation3.ui)
 
             implementation(libs.kotlinx.coroutines.core)
 
             implementation(libs.kotlinx.serialization.core)
+
+            implementation(libs.metro.runtime)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

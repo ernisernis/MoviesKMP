@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.NavKey
@@ -82,9 +83,15 @@ class NavigationState(
         // For each back stack, create a `SaveableStateHolder` decorator and use it to decorate
         // the entries from that stack. When backStacks changes, `rememberDecoratedNavEntries` will
         // be recomposed and a new list of decorated entries is returned.
+
+        // In order to add the `ViewModelStoreNavEntryDecorator`
+        // we also need to add the default `NavEntryDecorator`s as well. These provide
+        // extra information to the entry's content to enable it to display correctly
+        // and save its state.
         val decoratedEntries = backStacks.mapValues { (_, stack) ->
             val decorators = listOf(
                 rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
+                rememberViewModelStoreNavEntryDecorator()
             )
             rememberDecoratedNavEntries(
                 backStack = stack,
