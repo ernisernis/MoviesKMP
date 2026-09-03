@@ -21,6 +21,7 @@ fun Application.module() {
         json()
     }
 
+    // Need TMDB_ACCESS_TOKEN in .env root project file
     val dotenv = dotenv()
     val tmdbToken = dotenv["TMDB_ACCESS_TOKEN"]
         ?: error("TMDB_ACCESS_TOKEN is missing")
