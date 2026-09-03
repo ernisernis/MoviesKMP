@@ -1,4 +1,4 @@
-package ernxe.dev.movieskmp
+package ernxe.dev.movieskmp.client
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -8,13 +8,18 @@ import io.ktor.client.request.accept
 import io.ktor.client.request.bearerAuth
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.serialization.json.Json
 
 fun createTmdbClient(
     accessToken: String
 ): HttpClient {
     return HttpClient(CIO) {
         install(ContentNegotiation) {
-            json()
+            json(
+                Json {
+                    ignoreUnknownKeys = true
+                }
+            )
         }
 
         defaultRequest {

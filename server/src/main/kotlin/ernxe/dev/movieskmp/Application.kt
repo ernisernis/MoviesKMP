@@ -1,12 +1,17 @@
 package ernxe.dev.movieskmp
 
+import ernxe.dev.movieskmp.client.createTmdbClient
+import ernxe.dev.movieskmp.model.tmdb.TmdbPopularMoviesResponse
 import io.github.cdimascio.dotenv.dotenv
+import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
 import io.ktor.server.routing.routing
@@ -30,7 +35,15 @@ fun Application.module() {
 
     routing {
         get("/") {
-            call.respondText("Ktor: ${Greeting().greet()}")
+            call.respondText("Server running")
+        }
+
+        get("/movies/popular") {
+            val response = tmdbClient
+                .get("movie/popular")
+                .body<TmdbPopularMoviesResponse>()
+
+            call.respond(response)
         }
     }
 }
