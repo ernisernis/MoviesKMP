@@ -24,6 +24,8 @@ dependencies {
 
     implementation(libs.ktor.server.content.negotiation)
 
+    implementation(libs.dotenv)
+
     implementation(projects.shared)
     implementation(libs.logback)
     testImplementation(libs.ktor.serverTestHost)

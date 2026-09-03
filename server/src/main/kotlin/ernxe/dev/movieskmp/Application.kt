@@ -1,5 +1,6 @@
 package ernxe.dev.movieskmp
 
+import io.github.cdimascio.dotenv.dotenv
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
@@ -20,7 +21,8 @@ fun Application.module() {
         json()
     }
 
-    val tmdbToken = System.getenv("TMDB_ACCESS_TOKEN")
+    val dotenv = dotenv()
+    val tmdbToken = dotenv["TMDB_ACCESS_TOKEN"]
         ?: error("TMDB_ACCESS_TOKEN is missing")
 
     val tmdbClient = createTmdbClient(tmdbToken)
