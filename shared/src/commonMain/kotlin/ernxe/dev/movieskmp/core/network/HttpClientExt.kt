@@ -4,26 +4,33 @@ import ernxe.dev.movieskmp.core.error.DataError
 import ernxe.dev.movieskmp.core.result.Result
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.SerializationException
-import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.cancellation.CancellationException
 
 suspend inline fun <reified T> safeCall(execute: () -> HttpResponse): Result<T, DataError.Remote> {
-    val response =
-        try {
-            execute()
-        } catch (e: UnresolvedAddressException) {
-            return Result.Error(DataError.Remote.NO_INTERNET)
-        } catch (e: SerializationException) {
-            return Result.Error(DataError.Remote.SERIALIZATION)
-        } catch (e: Exception) {
-            currentCoroutineContext().ensureActive()
-            return Result.Error(DataError.Remote.UNKNOWN)
-        }
+    val response = try {
+        execute()
+    } catch (e: CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        currentCoroutineContext().ensureActive()
 
+        return Result.Error(
+            when (e) {
+                is UnresolvedAddressException -> DataError.Remote.NO_INTERNET
+                is SerializationException -> DataError.Remote.SERIALIZATION
+                is HttpRequestTimeoutException -> DataError.Remote.REQUEST_TIMEOUT
+                else -> DataError.Remote.UNKNOWN
+            }
+        )
+    }
+
+    currentCoroutineContext().ensureActive()
     return responseToResult(response)
 }
 
