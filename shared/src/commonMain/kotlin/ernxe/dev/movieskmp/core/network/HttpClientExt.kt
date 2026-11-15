@@ -6,6 +6,7 @@ import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.statement.HttpResponse
+import io.ktor.serialization.JsonConvertException
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
@@ -39,8 +40,11 @@ suspend inline fun <reified T> responseToResult(response: HttpResponse): Result<
         in 200..299 -> {
             try {
                 Result.Success(response.body<T>())
-            } catch (e: NoTransformationFoundException) {
+            } catch (_: NoTransformationFoundException) {
                 Result.Error(DataError.Remote.SERVER_ERROR)
+            } catch (_: JsonConvertException) {
+                currentCoroutineContext().ensureActive()
+                Result.Error(DataError.Remote.SERIALIZATION)
             }
         }
         400 -> Result.Error(DataError.Remote.BAD_REQUEST)
