@@ -56,6 +56,8 @@ kotlin {
             implementation(libs.kotlinx.serialization.core)
 
             implementation(libs.metro.runtime)
+            implementation(libs.metrox.viewmodel)
+            implementation(libs.metrox.viewmodel.compose)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
