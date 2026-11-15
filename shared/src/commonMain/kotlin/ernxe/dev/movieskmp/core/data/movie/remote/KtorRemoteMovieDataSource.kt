@@ -9,8 +9,8 @@ import ernxe.dev.movieskmp.core.network.safeCall
 import ernxe.dev.movieskmp.core.result.Result
 import ernxe.dev.movieskmp.core.data.movie.remote.dto.MovieResponseDto
 import io.ktor.client.HttpClient
+import io.ktor.client.request.bearerAuth
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
 
 @ContributesBinding(AppScope::class)
 @Inject
@@ -20,7 +20,7 @@ class KtorRemoteMovieDataSource(
     override suspend fun getNowPlayingMovies(): Result<MovieResponseDto, DataError.Remote> {
         return safeCall {
             httpClient.get("https://api.themoviedb.org/3/movie/now_playing") {
-                parameter("api_key", BuildKonfig.TMDB_API_KEY)
+                bearerAuth(BuildKonfig.TMDB_ACCESS_TOKEN)
             }
         }
     }

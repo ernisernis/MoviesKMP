@@ -17,7 +17,7 @@ val localPropertiesFile = rootProject.file("local.properties")
 if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
-val tmdbApiKey: String = localProperties.getProperty("TMDB_API_KEY", "")
+val tmdbAccessToken: String = localProperties.getProperty("TMDB_ACCESS_TOKEN", "")
 
 kotlin {
     android {
@@ -80,6 +80,6 @@ buildkonfig {
     packageName = "ernxe.dev.movieskmp"
 
     defaultConfigs {
-        buildConfigField(STRING, "TMDB_API_KEY", tmdbApiKey)
+        buildConfigField(STRING, "TMDB_ACCESS_TOKEN", tmdbAccessToken)
     }
 }
