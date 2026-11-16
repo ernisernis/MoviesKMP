@@ -6,4 +6,5 @@ import ernxe.dev.movieskmp.core.result.Result
 
 interface MovieRepository {
     suspend fun getNowPlayingMovies(): Result<List<Movie>, DataError.Remote>
+    suspend fun getPopularMovies(): Result<List<Movie>, DataError.Remote>
 }

@@ -17,6 +17,7 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
 import ernxe.dev.movieskmp.feature.home.presentation.HomeScreenRoot
+import ernxe.dev.movieskmp.feature.playground.presentation.PlaygroundScreenRoot
 import ernxe.dev.movieskmp.navigation.Home
 import ernxe.dev.movieskmp.navigation.Navigator
 import ernxe.dev.movieskmp.navigation.Playground
@@ -94,13 +95,7 @@ fun EntryProviderScope<NavKey>.playgroundSection(
     onSubRouteClick: () -> Unit,
 ) {
     entry<Playground> {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Text(
-                modifier = Modifier
-                    .align(Alignment.Center),
-                text = "Welcome to nav3, Playground screen",
-            )
-        }
+        PlaygroundScreenRoot()
     }
 }
 

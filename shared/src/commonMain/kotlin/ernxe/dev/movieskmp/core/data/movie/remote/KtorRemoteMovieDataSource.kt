@@ -24,4 +24,12 @@ class KtorRemoteMovieDataSource(
             }
         }
     }
+
+    override suspend fun getPopularMovies(): Result<MovieResponseDto, DataError.Remote> {
+        return safeCall {
+            httpClient.get("https://api.themoviedb.org/3/movie/popular") {
+                bearerAuth(BuildKonfig.TMDB_ACCESS_TOKEN)
+            }
+        }
+    }
 }

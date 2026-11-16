@@ -6,4 +6,5 @@ import ernxe.dev.movieskmp.core.data.movie.remote.dto.MovieResponseDto
 
 interface RemoteMovieDataSource {
     suspend fun getNowPlayingMovies(): Result<MovieResponseDto, DataError.Remote>
+    suspend fun getPopularMovies(): Result<MovieResponseDto, DataError.Remote>
 }

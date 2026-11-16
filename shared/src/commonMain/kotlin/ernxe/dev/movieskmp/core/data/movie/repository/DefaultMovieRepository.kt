@@ -23,4 +23,12 @@ class DefaultMovieRepository(
                 response.results.map { it.toMovie() }
             }
     }
+
+    override suspend fun getPopularMovies(): Result<List<Movie>, DataError.Remote> {
+        return remoteMovieDataSource
+            .getPopularMovies()
+            .map { response ->
+                response.results.map { it.toMovie() }
+            }
+    }
 }
