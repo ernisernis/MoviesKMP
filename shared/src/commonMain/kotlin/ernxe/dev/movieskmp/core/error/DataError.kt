@@ -1,6 +1,10 @@
 package ernxe.dev.movieskmp.core.error
 
 sealed interface DataError : Error {
+    enum class Local : DataError {
+        UNKNOWN,
+    }
+
     enum class Remote : DataError {
         BAD_REQUEST,
         REQUEST_TIMEOUT,

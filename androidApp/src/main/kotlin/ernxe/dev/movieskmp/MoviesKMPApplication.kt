@@ -7,5 +7,5 @@ import dev.zacsweers.metrox.android.MetroApplication
 import ernxe.dev.movieskmp.di.MetroGraph
 
 class MoviesKMPApplication : Application(), MetroApplication {
-    override val appComponentProviders: MetroAppComponentProviders by lazy { createGraphFactory<MetroGraph.Factory>().create() }
+    override val appComponentProviders: MetroAppComponentProviders by lazy { createGraphFactory<MetroGraph.Factory>().create(this) }
 }
