@@ -17,6 +17,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging {
         resources {
@@ -50,5 +51,18 @@ dependencies {
     implementation(libs.metrox.viewmodel)
     implementation(libs.metrox.viewmodel.compose)
 
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.testExt.junit)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    androidTestImplementation(libs.compose.foundation)
+    androidTestImplementation(libs.compose.material3)
+
+    constraints {
+        debugImplementation("androidx.concurrent:concurrent-futures:1.2.0") {
+            because("The debug app and AndroidX Test must use the same version.")
+        }
+    }
+
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.compose.uiTooling)
 }
