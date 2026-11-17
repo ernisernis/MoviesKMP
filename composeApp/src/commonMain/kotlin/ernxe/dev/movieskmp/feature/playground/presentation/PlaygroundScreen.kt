@@ -1,5 +1,6 @@
 package ernxe.dev.movieskmp.feature.playground.presentation
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -21,23 +22,25 @@ fun PlaygroundScreenRoot(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    when (state.screenState) {
-        PlaygroundScreenState.Loading -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+    AnimatedContent(
+        targetState = state.screenState
+    ) { targetState ->
+        when (targetState) {
+            is PlaygroundScreenState.Error -> {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Unable to load movies.")
+                }
             }
-        }
-
-        PlaygroundScreenState.Content -> {
-            PlaygroundScreen(
-                state = state,
-                modifier = Modifier.fillMaxSize(),
-            )
-        }
-
-        is PlaygroundScreenState.Error -> {
-            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Unable to load movies.")
+            PlaygroundScreenState.Loading -> {
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+            PlaygroundScreenState.Content -> {
+                PlaygroundScreen(
+                    state = state,
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
         }
     }
