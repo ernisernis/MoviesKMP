@@ -1,6 +1,5 @@
 package ernxe.dev.movieskmp.core.database
 
-import androidx.room3.AutoMigration
 import androidx.room3.ConstructedBy
 import androidx.room3.Database
 import androidx.room3.RoomDatabase
@@ -13,7 +12,6 @@ import ernxe.dev.movieskmp.core.data.movie.local.entity.PopularMovieEntity
 @Database(
     entities = [NowPlayingMovieEntity::class, PopularMovieEntity::class],
     version = 3,
-    autoMigrations = [AutoMigration(from = 1, to = 2)],
 )
 @ConstructedBy(MovieDatabaseConstructor::class)
 abstract class MovieDatabase : RoomDatabase() {
@@ -32,4 +30,8 @@ expect object MovieDatabaseConstructor : RoomDatabaseConstructor<MovieDatabase> 
 internal fun buildMovieDatabase(
     builder: RoomDatabase.Builder<MovieDatabase>,
     driver: SQLiteDriver,
-): MovieDatabase = builder.setDriver(driver).addMigrations(MIGRATION_2_3).build()
+): MovieDatabase = builder
+    .setDriver(driver)
+    .addMigrations(MIGRATION_2_3)
+    .fallbackToDestructiveMigration(dropAllTables = false)
+    .build()

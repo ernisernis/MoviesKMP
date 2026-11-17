@@ -9,11 +9,8 @@ import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import movieskmp.composeapp.generated.resources.Res
 import movieskmp.composeapp.generated.resources.compose_multiplatform
-import movieskmp.composeapp.generated.resources.ic_home
 import movieskmp.composeapp.generated.resources.ic_home_png
-import movieskmp.composeapp.generated.resources.ic_playground
 import movieskmp.composeapp.generated.resources.ic_playground_png
-import movieskmp.composeapp.generated.resources.ic_profile
 import movieskmp.composeapp.generated.resources.ic_profile_png
 import org.jetbrains.compose.resources.DrawableResource
 

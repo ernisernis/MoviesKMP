@@ -49,7 +49,7 @@ fun PlaygroundScreen(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
-        items(state.popularMovies, key = { it.id }) { movie ->
+        items(state.nowPlayingMovies, key = { it.id }) { movie ->
             Text(
                 text = movie.title,
                 modifier = Modifier.padding(16.dp),

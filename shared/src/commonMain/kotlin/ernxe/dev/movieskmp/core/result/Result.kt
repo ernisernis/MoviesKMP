@@ -1,6 +1,9 @@
 package ernxe.dev.movieskmp.core.result
 
 import ernxe.dev.movieskmp.core.error.Error
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 
 typealias DomainError = Error
 
@@ -9,6 +12,11 @@ sealed interface Result<out D, out E : Error> {
 
     data class Error<out E : DomainError>(val error: E) : Result<Nothing, E>
 }
+
+fun <D, E : Error> Flow<D>.asResult(
+    mapError: (Throwable) -> E,
+): Flow<Result<D, E>> = map<D, Result<D, E>> { Result.Success(it) }
+    .catch { cause -> emit(Result.Error(mapError(cause))) }
 
 inline fun <T, E : Error, R> Result<T, E>.map(map: (T) -> R): Result<R, E> {
     return when (this) {
