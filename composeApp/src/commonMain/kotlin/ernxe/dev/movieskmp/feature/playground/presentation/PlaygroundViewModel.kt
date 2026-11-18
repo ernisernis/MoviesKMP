@@ -12,10 +12,12 @@ import ernxe.dev.movieskmp.core.error.DataError
 import ernxe.dev.movieskmp.core.result.Result
 import ernxe.dev.movieskmp.core.result.onError
 import ernxe.dev.movieskmp.core.result.onSuccess
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -25,10 +27,20 @@ data class PlaygroundState(
     val nowPlayingMovies: List<Movie> = emptyList(),
 )
 
+// Could also be PlaygroundLoadingState
+// Could also be sealed class, both work
 sealed interface PlaygroundScreenState {
     data object Content : PlaygroundScreenState
     data class Error(val error: DataError) : PlaygroundScreenState
     data object Loading : PlaygroundScreenState
+}
+
+sealed interface PlaygroundAction {
+    data object ButtonClicked : PlaygroundAction
+}
+
+sealed interface PlaygroundEvent {
+    data object InvokeBackClick : PlaygroundEvent
 }
 
 @ViewModelKey(PlaygroundViewModel::class)
@@ -48,6 +60,9 @@ class PlaygroundViewModel(
             initialValue = PlaygroundState()
         )
 
+    private val eventChannel = Channel<PlaygroundEvent>(Channel.BUFFERED)
+    val events = eventChannel.receiveAsFlow()
+
     private fun loadData() {
         viewModelScope.launch {
             movieRepository
@@ -63,6 +78,12 @@ class PlaygroundViewModel(
                         screenState = PlaygroundScreenState.Error(error)
                     ) }
                 }
+        }
+    }
+
+    fun onAction(action: PlaygroundAction) {
+        when (action) {
+            PlaygroundAction.ButtonClicked -> TODO()
         }
     }
 }
