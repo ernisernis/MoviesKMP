@@ -90,3 +90,59 @@ fun PlaygroundScreen(
         }
     }
 }
+
+/*
+
+
+    private val query = MutableStateFlow("")
+    private val _searchState: StateFlow<ShopItemState> = query
+        .debounce(500.milliseconds)
+        .transformLatest { query ->
+            if (query.isBlank()) {
+                emit(ShopItemState.Blank)
+                return@transformLatest
+            }
+
+            emit(ShopItemState.Loading)
+
+            eshopRepository.searchEshopDevices(name = query)
+                .onSuccess { devices ->
+                    if (devices.isEmpty()) {
+                        emit(ShopItemState.Empty)
+                    } else {
+                        emit(ShopItemState.Content(devices.map { it.toShopCategoryUi() }))
+                    }
+                }
+                .onError { error ->
+                    emit(ShopItemState.Error(error.toUiText()))
+                }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ShopItemState.Blank,
+        )
+
+           private val _state = MutableStateFlow(ShopState())
+    val state = combine(
+        _state,
+        _searchState,
+    ) { state, searchState ->
+        state.copy(
+            screenState = state.screenState,
+            searchText = state.searchText,
+            categoryItems = state.categoryItems,
+            eshopItemsState = searchState,
+        )
+    }
+        .onStart {
+            loadData()
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = ShopState(),
+        )
+
+
+ */
